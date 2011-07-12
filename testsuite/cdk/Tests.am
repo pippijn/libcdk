@@ -1,0 +1,17 @@
+CDK_TESTS =	\
+	node_t	\
+	diagnostic_t	\
+	diagnostics_t	\
+	diagnostic_kind_t	\
+	source_manager_t	\
+	#
+node_t_SOURCES = testsuite/cdk/ast/node_t.cc
+diagnostic_t_SOURCES = testsuite/cdk/basic/diagnostic_t.cc
+diagnostics_t_SOURCES = testsuite/cdk/basic/diagnostics_t.cc
+diagnostic_kind_t_SOURCES = testsuite/cdk/basic/diagnostic_kind_t.cc
+source_manager_t_SOURCES = testsuite/cdk/basic/source_manager_t.cc
+node_t_LDADD = $(CDK_LIBS)
+diagnostic_t_LDADD = $(CDK_LIBS)
+diagnostics_t_LDADD = $(CDK_LIBS)
+diagnostic_kind_t_LDADD = $(CDK_LIBS)
+source_manager_t_LDADD = $(CDK_LIBS)

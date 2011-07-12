@@ -1,0 +1,15 @@
+include Tests.am
+
+regenerate:
+	$(RM) $(SRCDIR)/Tests.am
+	$(MAKE) .
+
+$(SRCDIR)/Tests.am: $(SRCDIR)/Rules.am
+	@echo "CDK_TESTS =	\\" > $@
+	@find $(SRCDIR) -name "*_t.cc" | sed -e 's|^.*/|\t|;s|\.cc$$|\t\\|' >> $@
+	@echo '	#' >> $@
+	$(AM_V_GEN)find $(SRCDIR) -name "*_t.cc" | sed -e 's|^\(.*/\)\(.*/\)\(.*\)\(\.cc\)|\3_SOURCES = $(CURDIR)/\2\3\4|' >> $@
+	@find $(SRCDIR) -name "*_t.cc" | sed -e 's|^.*/\(.*\)\.cc|\1_LDADD = $$(CDK_LIBS)|' >> $@
+
+check_PROGRAMS += $(CDK_TESTS)
+TESTS += $(CDK_TESTS)

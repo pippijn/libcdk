@@ -1,0 +1,7 @@
+lib_LTLIBRARIES += libcdk_lex.la
+CDK_LIBS += libcdk_lex.la
+
+LOCAL_SOURCES =			\
+	file_input_manager.cc	\
+	lexer.cc		\
+	string_input_manager.cc

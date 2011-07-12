@@ -1,0 +1,7 @@
+package cdk.proto;
+
+option optimize_for = LITE_RUNTIME;
+
+message SourceManager {
+	repeated string file = 1;
+}

@@ -1,0 +1,36 @@
+project {
+	name: "CDK"
+	version: "0.1"
+	contact: "cdk@xinutec.org"
+
+	lang: "C++"
+
+	ac_prog {
+		li { LEX }
+		li { YACC }
+	}
+
+	ac_prog {
+		li { YACC }
+	}
+
+	shell { 'export PKG_CONFIG_PATH="/opt/QtSDK/Desktop/Qt/473/gcc/lib/pkgconfig"' }
+
+	pkgconfig { package: "protobuf-lite" version: "2.4.0" }
+
+	pkgconfig { package: "QtCore" version: "4.7.0" }
+
+	shell { "AC_MSG_CHECKING([moc location])" }
+	shell { "MOC=`$PKG_CONFIG --variable=moc_location QtCore`" }
+	shell { "AC_SUBST([MOC])" }
+	shell { "AC_MSG_RESULT([$MOC])" }
+
+	shell { "AC_MSG_CHECKING([uic location])" }
+	shell { "UIC=`$PKG_CONFIG --variable=uic_location QtCore`" }
+	shell { "AC_SUBST([UIC])" }
+	shell { "AC_MSG_RESULT([$UIC])" }
+
+	shell { "AC_PATH_PROGS([RCC], [rcc])" }
+
+	output;
+}

@@ -1,0 +1,8 @@
+lib_LTLIBRARIES += libcdk_basic.la
+CDK_LIBS += libcdk_basic.la
+
+LOCAL_SOURCES =			\
+	diagnostic.cc		\
+	diagnostic_kind.cc	\
+	diagnostics.cc		\
+	source_manager.cc

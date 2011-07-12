@@ -1,0 +1,87 @@
+bin_PROGRAMS += compiler
+
+LOCAL_SOURCES =		\
+	main.cc		\
+	merge.cc	\
+	parseutil.cc	\
+	t_lexer.cc	\
+	yylex.ll	\
+	yyparse.yy
+
+LOCAL_LDADD = $(CDK_LIBS)
+
+GENFILES =			\
+	$(CURDIR)/rule_init.h	\
+	yystate.h		\
+	#node_type.h		\
+	#node_visit.h		\
+	#node_t.h		\
+	#visitor_t.h		\
+	#node_fwd.h		\
+	#visitor_cc.h
+BUILT_SOURCES += yylex.cc yylex.h yyparse.cc $(GENFILES)
+CLEANFILES += $(GENFILES) $(nodist_makepp_SOURCES)
+
+yylex.cc: $(CURDIR)/yylex.ll
+	$(AM_V_LEX)flex -o$@ $<
+	@sed -i -e 's|{0,0,0}$$|{yytbl_id(0),0,0}|' $@
+
+yylex.h: yylex.cc
+	@test -z "`diff $@ /tmp/$@ 2>&1`"	\
+		|| (echo "Updating $@" && mv /tmp/$@ $@)
+
+yystate.h: yylex.h
+	@echo 'namespace yy { enum state {' > $@
+	$(AM_V_GEN)grep '^#define [A-Z][A-Z_]* [0-9]\+$$' $< | grep -v ' YY_' | awk '{print $$2 ","}' >> $@
+	@echo 'NSTATE' >> $@
+	@echo '}; }' >> $@
+
+%.h: include/cdk/gen/%.pl include/compiler/nodes.pm
+	$(AM_V_GEN)perl $< > $@
+
+%/rule_init.h: %/yyparse.yy
+	@$(MKDIR_P) $(@D)
+	@echo 'enum rule_init {' > $@
+	$(AM_V_GEN)\
+	L=`grep -o '^[a-z_]\+$$' $<`;	\
+	for i in $$L; do		\
+		echo "  r_$$i,"		\
+			>> $@;		\
+	done
+	@echo '  RULE_INITS' >> $@
+	@echo '};' >> $@
+
+%/node_type.h: %/yyparse.yy
+	@echo 'namespace nodes { enum node_type {' > $@
+	$(AM_V_GEN)\
+	L=`grep -o 'make_node<n_\w*' $<	\
+		| sed -e 's/.*<n_//'		\
+		| sort -u`;			\
+	for i in $$L; do			\
+		echo "  n_$$i,"			\
+			>> $@;			\
+	done
+	@echo '  NODE_TYPES' >> $@
+	@echo '};' >> $@
+	@echo 'extern char const *const node_type_name[];' >> $@
+	@echo '}' >> $@
+
+%/node_visit.h: %/node_type.h
+	@$(RM) $@
+	$(AM_V_GEN)\
+	L=`grep -o '  n_\w*,$$' $<				\
+	    | sed -r -e 's/n_(\w+),/\1/'`;			\
+	for i in $$L; do					\
+	    echo "  bool visit_$$i (generic_node &n);" >> $@;	\
+	done
+
+%/node_type.cc: %/node_type.h
+	@echo '#include "node_type.h"' > $@
+	@echo 'char const *const nodes::node_type_name[] = {' >> $@
+	$(AM_V_GEN)\
+	L=`grep -o '  n_\w*,$$' $<		\
+	    | sed -r -e 's/n_(\w+),/\1/'`;	\
+	for i in $$L; do			\
+	    echo "  \"$$i\"," >> $@;		\
+	done
+	@echo '};' >> $@

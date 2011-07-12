@@ -1,0 +1,8 @@
+lib_LTLIBRARIES += libcdk_ast.la
+CDK_LIBS += libcdk_ast.la
+
+LOCAL_SOURCES =			\
+	generic_node.cc		\
+	generic_token.cc	\
+	node.cc			\
+	serialisation.cc
