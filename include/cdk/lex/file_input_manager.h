@@ -22,7 +22,7 @@ private:
   basic::fileref_vec::const_iterator it;
   basic::fileref_vec::const_iterator et;
 
-  QFile *fh;
+  std::unique_ptr<QFile> fh;
 };
 
 END_LEX_NAMESPACE

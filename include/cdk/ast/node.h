@@ -8,7 +8,12 @@ struct VISIBLE node
 {
   node ();
   node (location const &loc);
-  ~node ();
+  virtual ~node ();
+
+  virtual void accept (visitor &v) = 0;
+
+  template<typename T> T &as () { return dynamic_cast<T &> (*this); }
+  template<typename T> T *is () { return dynamic_cast<T *> ( this); }
 
   static bool audit_hash ();
   static void compress_hash ();

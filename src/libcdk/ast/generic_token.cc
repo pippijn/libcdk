@@ -1,6 +1,7 @@
 #include "cdk/ast/generic_token.h"
 
 #include "cdk/ast/location.h"
+#include "cdk/ast/visitor.h"
 
 BEGIN_AST_NAMESPACE
 
@@ -18,6 +19,13 @@ struct generic_token::pimpl
   }
 };
 
+void
+generic_token::accept (visitor &v)
+{
+  v.visit (*this);
+}
+
+
 generic_token::generic_token ()
 {
 }
@@ -34,6 +42,13 @@ generic_token::generic_token (location const &loc, short tok, std::string &&text
 
 generic_token::~generic_token ()
 {
+}
+
+
+std::string const &
+generic_token::text () const
+{
+  return self->text;
 }
 
 END_AST_NAMESPACE

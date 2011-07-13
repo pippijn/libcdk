@@ -1,16 +1,24 @@
 #include "cdk/ast/node.h"
 
+#include "cdk/ast/location.h"
+
 #include <algorithm>
 
 BEGIN_AST_NAMESPACE
 
-void intrusive_ptr_release (node *n) { if (!n->refcnt--) delete n; }
+void intrusive_ptr_release (node *n) { if (!--n->refcnt) delete n; }
 void intrusive_ptr_add_ref (node *n) { ++n->refcnt; }
 
 
 struct node::pimpl
 {
   size_t index;
+  location loc;
+
+  pimpl (location const &loc)
+    : loc (loc)
+  {
+  }
 };
 
 
@@ -18,7 +26,15 @@ static std::vector<node *> nodes;
 
 node::node ()
   : refcnt (0)
-  , self (new pimpl)
+  , self (new pimpl (location::generated))
+{
+  self->index = nodes.size ();
+  nodes.push_back (this);
+}
+
+node::node (location const &loc)
+  : refcnt (0)
+  , self (new pimpl (loc))
 {
   self->index = nodes.size ();
   nodes.push_back (this);

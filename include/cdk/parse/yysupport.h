@@ -1,3 +1,4 @@
+#include "cdk/ast/generic_node.h"
 #include "cdk/ast/generic_token.h"
 #include "cdk/ast/location.h"
 #include "cdk/lex/lexer.h"
@@ -35,3 +36,5 @@ yylex (YYSTYPE *yylval, YYLTYPE *yylloc, parser *self)
     fprintf (File, "%d.%d-%d.%d",			\
 	     (Loc).first_line, (Loc).first_column,	\
 	     (Loc).last_line,  (Loc).last_column)
+
+using cdk::ast::make_node;

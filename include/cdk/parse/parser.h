@@ -17,6 +17,8 @@ struct VISIBLE parser
   lex::lexer &lex ();
   void error (ast::location const &lloc, char const *msg);
 
+  ast::node_ptr doc;
+
   PIMPL;
 };
 

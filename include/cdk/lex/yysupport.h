@@ -22,11 +22,9 @@ template<short Tok>
 int
 cdk::lex::lexer::pimpl::make_token (YYSTYPE *lval, YYLTYPE const *lloc, char const *text, int leng)
 {
-#if ALLOC_TOKEN
   if (!this->text.empty ())
     lval->token = new cdk::ast::generic_token (*lloc, Tok, move (this->text));
   else
     lval->token = new cdk::ast::generic_token (*lloc, Tok, text, leng);
-#endif
   return Tok;
 }

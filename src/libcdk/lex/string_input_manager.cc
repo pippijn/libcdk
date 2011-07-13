@@ -2,16 +2,14 @@
 
 #include "cdk/lex/yyvtable.h"
 
-#include <boost/algorithm/string/trim.hpp>
-
 #include <QString>
 
 static QString const string_file = "<string>";
 
 BEGIN_LEX_NAMESPACE
 
-string_input_manager::string_input_manager (std::string const &s)
-  : str (boost::trim_copy (s))
+string_input_manager::string_input_manager (QString const &s)
+  : str (s.trimmed ().toUtf8 ())
   , used (false)
 {
 }

@@ -10,6 +10,9 @@
 int yyget_column (yyscan_t yyscanner);
 void yyset_column (int column_no, yyscan_t yyscanner);
 
+int yytables_fload (FILE *fh, yyscan_t yyscanner) { return 0; }
+int yytables_destroy (yyscan_t yyscanner) { return 0; }
+
 static cdk::lex::yyvtable const yyvtbl = {
   yylex_init_extra,
   yylex_destroy,

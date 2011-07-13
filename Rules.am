@@ -23,7 +23,7 @@ AM_LDFLAGS	+= $(PROTOBUF_LITE_LIBS)
 AM_CXXFLAGS	+= -O3
 AM_CXXFLAGS	+= -march=native
 #AM_CXXFLAGS	+= -fweb
-#AM_CXXFLAGS	+= -fno-inline
+AM_CXXFLAGS	+= -fno-inline
 #AM_CXXFLAGS	+= -ffast-math
 #AM_CXXFLAGS	+= -fprofile-generate
 #AM_CXXFLAGS	+= -fprofile-use

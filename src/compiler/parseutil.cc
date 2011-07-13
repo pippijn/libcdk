@@ -19,7 +19,7 @@ parse (cdk::lex::lexer &lex)
 
 
 cdk::ast::node_ptr
-parse_string (std::string const &s, int init)
+parse_string (QString const &s, int init)
 {
   cdk::lex::string_input_manager im (s);
   t_lexer lex (im);

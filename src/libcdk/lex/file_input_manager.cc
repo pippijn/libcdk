@@ -31,25 +31,20 @@ file_input_manager::file_input_manager (basic::source_manager const &sm,
   : sm (sm)
   , it (files.begin ())
   , et (files.end ())
-  , fh (NULL)
 {
 }
 
 file_input_manager::~file_input_manager ()
 {
-  delete fh;
 }
 
 bool
 file_input_manager::load (char const *&data, size_t &length)
 {
-  delete fh;
-  fh = 0;
-
   if (it == et)
     return false;
 
-  fh = new QFile (sm.file_name (*it));
+  fh.reset (new QFile (sm.file_name (*it)));
   if (!fh->open (QIODevice::ReadOnly))
     throw std::runtime_error ("Could not open " + fh->fileName ().toStdString () + " for reading");
   ++it;

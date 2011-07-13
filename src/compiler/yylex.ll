@@ -9,7 +9,7 @@
 %option header-file="/tmp/yylex.h"
 %option bison-locations
 %option reentrant
-%option tables-file="yyscanner.tables"
+/*%option tables-file="yyscanner.tables"*/
 %option ecs full 8bit
 %option stack
 %option nounput noinput nounistd

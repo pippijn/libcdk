@@ -13,10 +13,12 @@ BEGIN_AST_NAMESPACE
 NODE (node);
 NODE (generic_node);
 NODE (generic_token);
+NODE (merge_node);
 
 VISIBLE void intrusive_ptr_release (node *n);
 VISIBLE void intrusive_ptr_add_ref (node *n);
 
 struct location;
+struct visitor;
 
 END_AST_NAMESPACE
