@@ -1,4 +1,0 @@
-libcdk
-======
-
-Compiler Development Toolkit

@@ -1,0 +1,15 @@
+include cdk/Rules.am
+
+#include Tests.am
+$(SRCDIR)/Tests.am: $(CURDIR)/Rules.am
+	@echo "CPP_TESTS =	\\" > $@
+	@find $(SRCDIR)/in -name "*.cc" -or -name "*.c" -or -name "*.ii" -or -name "*.i" | sed -e 's|^$(SRCDIR)/|\t|;s|$$|\t\\|' | sort >> $@
+	@echo '	#' >> $@
+
+TESTS += $(CPP_TESTS)
+
+TEST_EXTENSIONS = .cc .c .ii .i
+CC_LOG_COMPILER = $(builddir)/compiler
+C_LOG_COMPILER = $(builddir)/compiler
+II_LOG_COMPILER = $(builddir)/compiler
+I_LOG_COMPILER = $(builddir)/compiler

@@ -1,0 +1,57 @@
+bin_PROGRAMS += compiler
+
+LOCAL_SOURCES =			\
+	main.cc			\
+	merge.cc		\
+	parseutil.cc		\
+	print.cc		\
+	t_lexer.cc		\
+	yylex.ll		\
+	yyparse.yy
+
+LOCAL_LDADD = $(CDK_LIBS) libast.la
+
+LOCAL_GENFILES =		\
+	$(CURDIR)/node_type.pm	\
+	yystate.h
+BUILT_SOURCES += $(LOCAL_GENFILES) yylex.cc yylex.h yyparse.cc
+CLEANFILES += $(LOCAL_GENFILES) $(nodist_LOCAL_SOURCES)
+
+yylex.cc: $(CURDIR)/yylex.ll
+	$(AM_V_LEX)flex -o$@ $<
+	@sed -i -e 's|{0,0,0}$$|{yytbl_id(0),0,0}|' $@
+
+yylex.h: yylex.cc
+	@test -z "`diff $@ /tmp/$@ 2>&1`"	\
+		|| (echo "Updating $@" && mv /tmp/$@ $@)
+
+yystate.h: yylex.h
+	@echo 'namespace yy { enum state {' > $@
+	$(AM_V_GEN)grep '^#define [A-Z][A-Z_]* [0-9]\+$$' $< | grep -v ' YY_' | awk '{print $$2 ","}' >> $@
+	@echo 'NSTATE' >> $@
+	@echo '}; }' >> $@
+
+%/rule_init.h: %/yyparse.yy
+	@$(MKDIR_P) $(@D)
+	@echo 'enum rule_init {' > $@
+	$(AM_V_GEN)\
+	L=`grep -o '^[a-z_]\+$$' $<`;	\
+	for i in $$L; do		\
+		echo "  r_$$i,"		\
+			>> $@;		\
+	done
+	@echo '  RULE_INITS' >> $@
+	@echo '};' >> $@
+
+%/node_type.pm: %/yyparse.yy
+	@$(MKDIR_P) $(@D)
+	@echo '{' > $@
+	$(AM_V_GEN)\
+	L=`grep -o 'make_node<\w*' $<		\
+		| sed -e 's/.*<//'		\
+		| sort -u`;			\
+	for i in $$L; do			\
+		echo "  $$i => [],"		\
+			>> $@;			\
+	done
+	@echo '}' >> $@

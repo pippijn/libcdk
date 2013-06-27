@@ -1,0 +1,5 @@
+include ast/Rules.am
+include basic/Rules.am
+include lex/Rules.am
+include parse/Rules.am
+include proto/Rules.am

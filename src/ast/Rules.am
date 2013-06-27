@@ -1,0 +1,23 @@
+lib_LTLIBRARIES += libast.la
+
+nodist_LOCAL_SOURCES =		\
+	$(CURDIR)/ast.cc	\
+	$(CURDIR)/node_type.cc
+
+LOCAL_GENFILES =		\
+	$(CURDIR)/ast.h		\
+	$(CURDIR)/ast_fwd.h	\
+	$(CURDIR)/node_enum.h	\
+	$(CURDIR)/node_type.h	\
+	$(CURDIR)/node_visit.cc	\
+	$(CURDIR)/node_visit.h
+BUILT_SOURCES += $(LOCAL_GENFILES)
+CLEANFILES += $(LOCAL_GENFILES) $(nodist_LOCAL_SOURCES)
+
+%.h: %.h.pl src/compiler/node_type.pm
+	@$(MKDIR_P) $(@D)
+	$(AM_V_GEN)perl $+ > $@
+
+%.cc: %.cc.pl src/compiler/node_type.pm
+	@$(MKDIR_P) $(@D)
+	$(AM_V_GEN)perl $+ > $@

@@ -1,0 +1,5 @@
+CDK_LIBS = # empty
+
+include ast/Rules.am
+include compiler/Rules.am
+include libcdk/Rules.am

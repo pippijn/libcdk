@@ -1,0 +1,16 @@
+lib_LTLIBRARIES += libcdk_proto.la
+CDK_LIBS += libcdk_proto.la
+
+LOCAL_SOURCES =			\
+	node.pb.cc		\
+	source_manager.pb.cc
+
+LOCAL_CXXFLAGS = $(AM_CXXFLAGS) -fvisibility=default
+
+BUILT_SOURCES +=		\
+	node.pb.h		\
+	source_manager.pb.h
+
+%.pb.h: %.pb.cc
+%.pb.cc: $(CURDIR)/%.proto
+	$(AM_V_PROTO)protoc --cpp_out=$(builddir) --proto_path=$(SRCDIR) $<

@@ -1,0 +1,5 @@
+lib_LTLIBRARIES += libcdk_parse.la
+CDK_LIBS += libcdk_parse.la
+
+LOCAL_SOURCES =		\
+	parser.cc

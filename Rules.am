@@ -1,0 +1,32 @@
+include automake/init.am
+include automake/cppinc.am
+
+AUTOMAKE_OPTIONS += -Wno-portability
+
+bin_PROGRAMS	= # empty
+lib_LTLIBRARIES	= # empty
+
+AM_YFLAGS	+= -d --verbose
+AM_CPPFLAGS	+= -ggdb3
+AM_CPPFLAGS	+= -DVISIBLE='__attribute__ ((__visibility__ ("default")))'
+AM_CXXFLAGS	+= -std=c++0x
+AM_CXXFLAGS	+= -fnon-call-exceptions
+AM_CXXFLAGS	+= -fvisibility=hidden
+AM_LDFLAGS	+= -no-undefined -Wl,-z.defs
+
+AM_CPPFLAGS	+= $(QTCORE_CFLAGS)
+AM_LDFLAGS	+= $(QTCORE_LIBS)
+
+AM_CPPFLAGS	+= $(PROTOBUF_LITE_CFLAGS)
+AM_LDFLAGS	+= $(PROTOBUF_LITE_LIBS)
+
+AM_CXXFLAGS	+= -O3
+AM_CXXFLAGS	+= -march=native
+#AM_CXXFLAGS	+= -fweb
+AM_CXXFLAGS	+= -fno-inline
+#AM_CXXFLAGS	+= -ffast-math
+#AM_CXXFLAGS	+= -fprofile-generate
+#AM_CXXFLAGS	+= -fprofile-use
+#AM_CXXFLAGS	+= -fno-unroll-loops
+
+include automake/stdinc.am
